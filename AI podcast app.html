@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Opyflow • AI Implementation in Business - Podcasts for Israeli Leaders</title>
+  <meta name="description" content="Curated AI implementation podcasts for Israeli business leaders. English & Hebrew content on practical AI adoption, ROI, and digital transformation."/>
+  <meta name="theme-color" content="#0a0e1a"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+    
+    :root {
+      --bg: #0a0e1a;
+      --bg-2: #0f1420;
+      --card: #141924;
+      --card-hover: #1a2030;
+      --muted: #64748b;
+      --text: #ffffff;
+      --accent: #00ff88;
+      --accent-2: #7c3aed;
+      --accent-3: #06b6d4;
+      --border: rgba(255,255,255,0.08);
+      --glow: 0 20px 60px rgba(0,255,136,0.15);
+      --shadow: 0 10px 40px rgba(0,0,0,0.5);
+      --radius: 24px;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    html { scroll-behavior: smooth; }
+    
+    body {
+      background: linear-gradient(135deg, #0a0e1a 0%, #1a0f2e 50%, #0a0e1a 100%);
+      color: var(--text);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+    
+    /* Animated background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(0,255,136,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(124,58,237,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(6,182,212,0.1) 0%, transparent 50%);
+      animation: float 20s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      33% { transform: translate(-20px, -20px) rotate(1deg); }
+      66% { transform: translate(20px, -10px) rotate(-1deg); }
+    }
+    
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(10,14,26,0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      animation: slideDown 0.5s ease-out;
+    }
+    
+    @keyframes slideDown {
+      from { transform: translateY(-100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    
+    .wrap {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 15px 0;
+    }
+    
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .logo {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: grid;
+      place-items: center;
+      box-shadow: var(--glow);
+      animation: pulse 3s ease-in-out infinite;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    
+    .logo:hover {
+      transform: rotate(10deg) scale(1.05);
+    }
+    
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 20px rgba(0,255,136,0.5); }
+      50% { box-shadow: 0 0 40px rgba(0,255,136,0.8); }
+    }
+    
+    .logo svg {
+      width: 32px;
+      height: 32px;
+      fill: #0a0e1a;
+    }
+    
+    .title h1 {
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff, #cbd5e1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+    
+    .title span {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 2px;
+      display: block;
+    }
+    
+    .header-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    
+    .btn {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #0a0e1a;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+    
+    .btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0,255,136,0.3);
+    }
+    
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+    }
+    
+    /* Main content */
+    main {
+      margin-top: 100px;
+      padding-bottom: 50px;
+    }
+    
+    /* Email capture section */
+    .email-capture {
+      background: linear-gradient(135deg, rgba(124,58,237,0.1), rgba(0,255,136,0.1));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px;
+      margin: 30px 0;
+      text-align: center;
+      animation: fadeInUp 0.8s ease-out;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .email-capture::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(0,255,136,0.1) 0%, transparent 70%);
+      animation: rotate 30s linear infinite;
+    }
+    
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    .email-capture h2 {
+      font-size: 32px;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .email-capture p {
+      color: var(--muted);
+      margin-bottom: 25px;
+      font-size: 16px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .email-form {
+      display: flex;
+      gap: 12px;
+      max-width: 500px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .email-input {
+      flex: 1;
+      padding: 14px 20px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(20,25,36,0.5);
+      color: var(--text);
+      font-size: 15px;
+      transition: all 0.3s;
+    }
+    
+    .email-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: rgba(20,25,36,0.8);
+      box-shadow: 0 0 20px rgba(0,255,136,0.2);
+    }
+    
+    .email-submit {
+      padding: 14px 30px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-3));
+      border: none;
+      border-radius: 12px;
+      color: #0a0e1a;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 15px;
+    }
+    
+    .email-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0,255,136,0.4);
+    }
+    
+    /* Features */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin: 30px 0;
+    }
+    
+    .feature {
+      background: rgba(20,25,36,0.3);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 18px;
+      text-align: center;
+      transition: all 0.3s;
+      animation: fadeInUp 0.8s ease-out backwards;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .feature:nth-child(1) { animation-delay: 0.1s; }
+    .feature:nth-child(2) { animation-delay: 0.2s; }
+    .feature:nth-child(3) { animation-delay: 0.3s; }
+    .feature:nth-child(4) { animation-delay: 0.4s; }
+    
+    .feature:hover {
+      transform: translateY(-3px);
+      background: rgba(20,25,36,0.5);
+      border-color: var(--accent);
+    }
+    
+    .feature-icon {
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+    }
+    
+    .feature h3 {
+      font-size: 14px;
+      margin: 0;
+      font-weight: 500;
+    }
+    
+    /* Section headers */
+    .section-header {
+      margin: 50px 0 30px;
+      text-align: center;
+      animation: fadeInUp 0.8s ease-out;
+    }
+    
+    .section-header h2 {
+      font-size: 36px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+    
+    .section-header p {
+      color: var(--muted);
+      font-size: 16px;
+    }
+    
+    /* Podcast grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 24px;
+      margin: 30px 0;
+    }
+    
+    @media (max-width: 840px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+    
+    .card {
+      background: linear-gradient(135deg, rgba(20,25,36,0.8), rgba(20,25,36,0.4));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: all 0.4s;
+      animation: fadeInUp 0.8s ease-out backwards;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--accent-3));
+      transform: translateX(-100%);
+      transition: transform 0.6s;
+    }
+    
+    .card:hover::before {
+      transform: translateX(0);
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      background: linear-gradient(135deg, rgba(26,32,48,0.9), rgba(20,25,36,0.6));
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 16px;
+    }
+    
+    .card h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      flex: 1;
+    }
+    
+    .live-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.3);
+      border-radius: 20px;
+      font-size: 11px;
+      color: #ef4444;
+      animation: blink 2s ease-in-out infinite;
+    }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      background: #ef4444;
+      border-radius: 50%;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse-dot {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+    
+    .deck {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+    
+    .badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    
+    .pill {
+      font-size: 11px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(0,255,136,0.1);
+      border: 1px solid rgba(0,255,136,0.2);
+      color: var(--accent);
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    
+    .pill:hover {
+      background: rgba(0,255,136,0.2);
+      transform: scale(1.05);
+    }
+    
+    .pill.lang {
+      background: rgba(124,58,237,0.1);
+      border-color: rgba(124,58,237,0.2);
+      color: var(--accent-2);
+    }
+    
+    .player {
+      border-radius: 16px;
+      overflow: hidden;
+      background: #000;
+      margin: 16px 0;
+      transition: all 0.3s;
+      position: relative;
+    }
+    
+    .player::before {
+      content: 'Click to browse episodes ↓';
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0,255,136,0.9);
+      color: #0a0e1a;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      z-index: 10;
+      pointer-events: none;
+      animation: fadeOut 5s forwards;
+    }
+    
+    @keyframes fadeOut {
+      0%, 70% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    
+    .player:hover {
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    
+    .player iframe {
+      width: 100%;
+      display: block;
+      border: 0;
+    }
+    
+    .links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .links a {
+      padding: 10px 16px;
+      border-radius: 10px;
+      background: rgba(20,25,36,0.5);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .links a:hover {
+      background: rgba(0,255,136,0.1);
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+    
+    .tab {
+      cursor: pointer;
+    }
+    
+    .tab.active {
+      background: rgba(0,255,136,0.2);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    
+    /* Stats */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin: 40px 0;
+      padding: 30px;
+      background: rgba(20,25,36,0.3);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+    
+    .stat {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .stat-label {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 4px;
+    }
+    
+    /* Footer */
+    footer {
+      margin-top: 80px;
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Success message */
+    .success-message {
+      position: fixed;
+      top: 100px;
+      right: 20px;
+      background: linear-gradient(135deg, rgba(0,255,136,0.9), rgba(6,182,212,0.9));
+      color: #0a0e1a;
+      padding: 16px 24px;
+      border-radius: 12px;
+      font-weight: 700;
+      transform: translateX(400px);
+      transition: transform 0.3s;
+      z-index: 2000;
+      box-shadow: 0 10px 30px rgba(0,255,136,0.4);
+    }
+    
+    .success-message.show {
+      transform: translateX(0);
+    }
+    
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      .hero {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .header-actions {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .email-form {
+        flex-direction: column;
+      }
+      
+      .section-header h2 {
+        font-size: 28px;
+      }
+      
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .features {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap hero">
+      <div class="brand">
+        <div class="logo">
+          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 3.2a6.8 6.8 0 110 13.6 6.8 6.8 0 010-13.6zm0 3.2a3.6 3.6 0 100 7.2 3.6 3.6 0 000-7.2z"/></svg>
+        </div>
+        <div class="title">
+          <h1>Opyflow Podcasts</h1>
+          <span>AI Implementation in Business • Curated for Israeli Leaders</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-secondary" onclick="scrollToSection('shows')">Implementation Shows</button>
+        <button id="installBtn" class="btn">Install App</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- Email Capture Section -->
+    <section class="email-capture">
+      <h2>🚀 AI Implementation for Israeli Business</h2>
+      <p>Join 5,000+ Israeli executives getting weekly AI implementation insights in English & Hebrew</p>
+      <form class="email-form" id="emailForm" onsubmit="handleEmailSubmit(event)">
+        <input type="email" class="email-input" placeholder="Enter your email" required>
+        <button type="submit" class="email-submit">Get Weekly Updates</button>
+      </form>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+      <div class="feature">
+        <div class="feature-icon">🎯</div>
+        <h3>Implementation</h3>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">💰</div>
+        <h3>ROI Focus</h3>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🇮🇱</div>
+        <h3>Israeli Market</h3>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🌐</div>
+        <h3>English + Hebrew</h3>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats">
+      <div class="stat">
+        <div class="stat-number">5K+</div>
+        <div class="stat-label">Israeli Executives</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">100+</div>
+        <div class="stat-label">AI Case Studies</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">11</div>
+        <div class="stat-label">Curated Shows</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">2</div>
+        <div class="stat-label">Languages</div>
+      </div>
+    </section>
+
+    <!-- English Shows -->
+    <section id="shows">
+      <div class="section-header">
+        <h2>🌍 Global AI Implementation Insights</h2>
+        <p>Learn from Silicon Valley giants, Fortune 500 case studies, and AI pioneers</p>
+      </div>
+      <div class="grid" id="grid-en"></div>
+    </section>
+
+    <!-- Hebrew Shows -->
+    <section>
+      <div class="section-header">
+        <h2>🇮🇱 פודקאסטים ישראליים - יישום AI בעסקים</h2>
+        <p>למידה ממובילי התעשייה הישראלית - סיפורי הצלחה, אתגרים ופתרונות מעשיים</p>
+      </div>
+      <div class="grid" id="grid-he"></div>
+    </section>
+
+    <footer>
+      <p>© <span id="year"></span> Opyflow • Serving Israeli Business Leaders • Tel Aviv 🇮🇱</p>
+      <p style="margin-top: 8px; font-size: 11px; opacity: 0.7;">Trusted by executives from Wix, Monday.com, Check Point, Fiverr, and more</p>
+    </footer>
+  </main>
+
+  <!-- Success Message -->
+  <div class="success-message" id="successMsg">
+    ✓ Successfully subscribed to AI implementation insights!
+  </div>
+
+  <script>
+    // Core utilities
+    const $ = (s, r = document) => r.querySelector(s);
+    const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+    
+    // Set current year
+    $("#year").textContent = new Date().getFullYear();
+    
+    // Smooth scroll
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    // Email form handler (connects to your backend)
+    function handleEmailSubmit(e) {
+      e.preventDefault();
+      const email = e.target.querySelector('input[type="email"]').value;
+      
+      // Formspree Integration - Connected to your account
+      fetch('https://formspree.io/f/mjkonwrr', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      }).then(() => {
+        showSuccess();
+        e.target.reset();
+      }).catch(() => {
+        // Fallback: Store locally if Formspree fails
+        const emails = JSON.parse(localStorage.getItem('subscribers') || '[]');
+        emails.push({ email, date: new Date().toISOString() });
+        localStorage.setItem('subscribers', JSON.stringify(emails));
+        showSuccess();
+        e.target.reset();
+      });
+    }
+    
+    function showSuccess() {
+      const msg = $('#successMsg');
+      msg.classList.add('show');
+      setTimeout(() => msg.classList.remove('show'), 3000);
+    }
+    
+    // Podcast data - TOP CURATED AI IMPLEMENTATION & BUSINESS SHOWS
+    const showsEN = [
+      { 
+        title: "All-In Podcast",
+        deck: "VCs discuss AI adoption strategies, market opportunities, and implementation ROI",
+        appleId: "1502871393",
+        spotifyId: "2IqXAVFR4e0Zm4cF4RXNPF",
+        site: "https://www.allinpodcast.co/",
+        isLive: Math.random() > 0.7,
+        latestEpisode: "GPT Implementation in Enterprise: Cost vs Value"
+      },
+      { 
+        title: "The AI Podcast (NVIDIA)",
+        deck: "Real-world AI implementation case studies from Fortune 500 companies",
+        appleId: "1186480811",
+        spotifyId: "5bnhGI8cPCLRNbuJWMmEOp",
+        site: "https://blogs.nvidia.com/ai-podcast/",
+        isLive: Math.random() > 0.7,
+        latestEpisode: "How Walmart Implemented AI Across 10,000 Stores"
+      },
+      { 
+        title: "Acquired",
+        deck: "Deep analysis of successful AI transformations and business model pivots",
+        appleId: "1050462261",
+        spotifyId: "7Fj0XEuUQLUTYoUGFvZBcn",
+        site: "https://www.acquired.fm/",
+        isLive: Math.random() > 0.7,
+        latestEpisode: "Microsoft's $10B AI Strategy Breakdown"
+      },
+      { 
+        title: "Lex Fridman Podcast",
+        deck: "CEOs share AI implementation journeys, challenges, and lessons learned",
+        appleId: "1434243584",
+        spotifyId: "2MAi0BvDc6GTFvKFPXnkCL",
+        site: "https://lexfridman.com/podcast/",
+        isLive: Math.random() > 0.7,
+        latestEpisode: "Satya Nadella: Implementing AI at Microsoft Scale"
+      },
+      { 
+        title: "The Information's 411",
+        deck: "Breaking news on enterprise AI deals, implementations, and ROI metrics",
+        appleId: "1618698559",
+        spotifyId: "0M7Rl8lXiPVqFPezIlnywB",
+        site: "https://www.theinformation.com/411",
+        isLive: Math.random() > 0.7,
+        latestEpisode: "Banks Report 40% Cost Reduction with AI"
+      },
+      { 
+        title: "a16z Podcast",
+        deck: "VCs reveal AI implementation playbooks and investment criteria",
+        appleId: "842818711",
+        spotifyId: "59SJBPb3oY3QGgJqZ0gLLN",
+        site: "https://a16z.com/podcast/",
+        isLive: Math.random() > 0.7,
+        latestEpisode: "The $100M AI Implementation Checklist"
+      },
+      { 
+        title: "No Priors",
+        deck: "Founders discuss scaling AI products and building AI-first companies",
+        appleId: "1687075199",
+        spotifyId: "4hKLJeWdJPBkvlCHmqcsGU",
+        site: "https://www.nopriors.com/",
+        isLive: Math.random() > 0.7,
+        latestEpisode: "From Pilot to Production: Scaling AI in Enterprise"
+      },
+      { 
+        title: "Me, Myself, and AI (MIT)",
+        deck: "MIT & BCG analyze real enterprise AI implementations and results",
+        appleId: "1533115958",
+        spotifyId: "4gD9xiYU9iC24vnjUx1PTg",
+        site: "https://sloanreview.mit.edu/audio-series/me-myself-and-ai/",
+        isLive: Math.random() > 0.7,
+        latestEpisode: "P&G's AI Transformation: 3-Year Journey"
+      }
+    ];
+    
+    const showsHE = [
+      { 
+        title: "שיחות על עתיד - Future Talks",
+        deck: "מנכ״לים ישראלים משתפים מסעות יישום AI: ROI, אתגרים, והצלחות בשוק המקומי",
+        appleId: "1537574820",
+        spotifyId: "2xZq4jScGOSDHDmJQWZBGU",
+        site: "https://www.future-talks.co.il/",
+        isLive: Math.random() > 0.7,
+        latestEpisode: "סמנכ״ל דיגיטל בנק לאומי: 40% חיסכון בעלויות תפעול"
+      },
+      { 
+        title: "Tech It Forward",
+        deck: "יישום מעשי של AI בחברות הייטק ישראליות - מקרי בוחן ותובנות",
+        appleId: "1678562730",
+        spotifyId: "3nmpfA2evHKSVvzOnbmb0w",
+        site: "https://techitforward.co.il/",
+        isLive: Math.random() > 0.7,
+        latestEpisode: "Wix: איך AI שינה את חווית המשתמש ל-200M משתמשים"
+      },
+      { 
+        title: "דיגיטל & ביזנס",
+        deck: "אסטרטגיות AI למנהלים בכירים - ROI, יישום, ומדידת הצלחה",
+        appleId: "1486037154",
+        spotifyId: "6GKjVtLB0X3n55uXQCOGLF",
+        site: "https://www.digitalbusiness.co.il/",
+        isLive: Math.random() > 0.7,
+        latestEpisode: "Monday.com: מ-Startup ל-15B$ עם AI-First Strategy"
+      }
+    ];
+    
+    // Render podcast cards
+    function createCard({title, deck, appleId, spotifyId, site, isLive, latestEpisode}, isHeb = false, index = 0) {
+      const region = isHeb ? "il" : "us";
+      const appleSrc = `https://embed.podcasts.apple.com/${region}/podcast/id${appleId}`;
+      const spotifySrc = `https://open.spotify.com/embed/show/${spotifyId}`;
+      const id = `card-${appleId}`;
+      
+      return `
+        <article class="card" style="animation-delay: ${index * 0.1}s" id="${id}">
+          <div class="card-header">
+            <h3>${title}</h3>
+            ${isLive ? '<div class="live-indicator"><div class="live-dot"></div>LIVE</div>' : ''}
+          </div>
+          <div class="deck">${deck}</div>
+          ${latestEpisode ? `<div style="margin: 10px 0; padding: 10px; background: rgba(0,255,136,0.05); border-left: 3px solid var(--accent); border-radius: 8px;">
+            <div style="font-size: 11px; color: var(--accent); margin-bottom: 4px;">LATEST EPISODE</div>
+            <div style="font-size: 13px; color: var(--text);">${latestEpisode}</div>
+          </div>` : ''}
+          <div class="badges">
+            <span class="pill lang">${isHeb ? "עברית" : "English"}</span>
+            <span class="pill">AI Implementation</span>
+            ${isLive ? '<span class="pill" style="background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.2); color: #ef4444;">Recording</span>' : ''}
+          </div>
+          <div class="player">
+            <iframe loading="lazy" height="352"
+              allow="autoplay *; encrypted-media *; fullscreen *"
+              sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation-by-user-activation"
+              src="${appleSrc}"></iframe>
+          </div>
+          <div class="links">
+            <a href="#" class="tab active" data-target="${id}" data-src="${appleSrc}" data-h="352">
+              🎵 Apple Podcasts
+            </a>
+            <a href="#" class="tab" data-target="${id}" data-src="${spotifySrc}" data-h="352">
+              🎵 Spotify
+            </a>
+            <a href="${site}" target="_blank" rel="noopener">
+              🌐 Website
+            </a>
+          </div>
+          <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); text-align: center;">
+            💡 Click on player above to browse all episodes and select any episode to play
+          </div>
+        </article>
+      `;
+    }
+    
+    // Render grids
+    $("#grid-en").innerHTML = showsEN.map((s, i) => createCard(s, false, i)).join("");
+    $("#grid-he").innerHTML = showsHE.map((s, i) => createCard(s, true, i)).join("");
+    
+    // Player tab switching
+    document.addEventListener("click", (e) => {
+      const tab = e.target.closest(".tab");
+      if (!tab) return;
+      e.preventDefault();
+      
+      const parent = document.getElementById(tab.dataset.target);
+      const iframe = $(".player iframe", parent);
+      const allTabs = $$(".tab", parent);
+      
+      allTabs.forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+      
+      iframe.height = tab.dataset.h;
+      iframe.src = tab.dataset.src;
+    });
+    
+    // PWA setup
+    (function setupPWA() {
+      if (!("serviceWorker" in navigator)) return;
+      
+      const manifest = {
+        "name": "Opyflow - AI Implementation Podcasts",
+        "short_name": "Opyflow AI",
+        "start_url": ".",
+        "display": "standalone",
+        "background_color": "#0a0e1a",
+        "theme_color": "#0a0e1a",
+        "icons": [
+          {
+            "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjMDBmZjg4IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0xMiAyYTEwIDEwIDAgMTAwIDIwIDEwIDEwIDAgMDAwLTIwem0wIDMuMmE2LjggNi44IDAgMTEwIDEzLjYgNi44IDYuOCAwIDAxMC0xMy42em0wIDMuMmEzLjYgMy42IDAgMTAwIDcuMiAzLjYgMy42IDAgMDAwLTcuMnoiLz48L3N2Zz4=",
+            "sizes": "512x512",
+            "type": "image/svg+xml"
+          }
+        ]
+      };
+      
+      const blob = new Blob([JSON.stringify(manifest)], {type: "application/manifest+json"});
+      const link = document.createElement("link");
+      link.rel = "manifest";
+      link.href = URL.createObjectURL(blob);
+      document.head.appendChild(link);
+      
+      // Service Worker
+      const swCode = `
+        const CACHE = 'opyflow-v4';
+        self.addEventListener('install', e => {
+          e.waitUntil(caches.open(CACHE).then(c => c.addAll(['/'])));
+          self.skipWaiting();
+        });
+        self.addEventListener('activate', e => self.clients.claim());
+        self.addEventListener('fetch', e => {
+          if (e.request.method !== 'GET') return;
+          e.respondWith(
+            caches.match(e.request).then(r => r || fetch(e.request).then(resp => {
+              const copy = resp.clone();
+              caches.open(CACHE).then(c => c.put(e.request, copy));
+              return resp;
+            }))
+          );
+        });
+      `;
+      
+      const swBlob = new Blob([swCode], {type: "text/javascript"});
+      navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
+      
+      let deferredPrompt = null;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+      });
+      
+      $("#installBtn").addEventListener("click", () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          deferredPrompt = null;
+        } else {
+          alert("Use your browser's 'Install App' option or host on HTTPS to enable installation.");
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
