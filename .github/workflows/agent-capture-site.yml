@@ -1,0 +1,74 @@
+name: Agent capture site
+
+on:
+  push:
+    branches:
+      - agent-site-review-20260702
+  workflow_dispatch:
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Playwright
+        run: |
+          npm init -y
+          npm install playwright
+          npx playwright install --with-deps chromium
+
+      - name: Capture page
+        run: |
+          cat > capture.mjs <<'EOF'
+          import { chromium } from 'playwright';
+          import fs from 'node:fs';
+
+          const browser = await chromium.launch({ headless: true });
+          const page = await browser.newPage({
+            viewport: { width: 1440, height: 1000 },
+            deviceScaleFactor: 1,
+            extraHTTPHeaders: {
+              'bypass-tunnel-reminder': 'true'
+            }
+          });
+
+          const logs = [];
+          page.on('console', msg => logs.push(`[console:${msg.type()}] ${msg.text()}`));
+          page.on('pageerror', err => logs.push(`[pageerror] ${err.message}`));
+          page.on('requestfailed', req => logs.push(`[requestfailed] ${req.url()} :: ${req.failure()?.errorText || ''}`));
+
+          const url = 'https://icy-eels-hug.loca.lt/what-we-do/';
+          const response = await page.goto(url, { waitUntil: 'networkidle', timeout: 90000 });
+          await page.waitForTimeout(3000);
+
+          const status = response?.status() ?? null;
+          const title = await page.title();
+          const bodyText = await page.locator('body').innerText().catch(() => '');
+          const html = await page.content();
+          const finalUrl = page.url();
+
+          await page.screenshot({ path: 'what-we-do-full.png', fullPage: true });
+          fs.writeFileSync('what-we-do.html', html);
+          fs.writeFileSync('what-we-do.txt', bodyText);
+          fs.writeFileSync('capture-meta.json', JSON.stringify({ status, title, finalUrl, logs }, null, 2));
+
+          await browser.close();
+          EOF
+          node capture.mjs
+
+      - name: Upload capture
+        uses: actions/upload-artifact@v4
+        with:
+          name: what-we-do-capture
+          path: |
+            what-we-do-full.png
+            what-we-do.html
+            what-we-do.txt
+            capture-meta.json
+          if-no-files-found: error
+          retention-days: 1
