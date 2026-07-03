@@ -1,0 +1,45 @@
+name: Temporary browser capture
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: |
+          npm init -y
+          npm install playwright
+          npx playwright install --with-deps chromium
+          cat > capture.mjs <<'EOF'
+          import { chromium } from 'playwright';
+          import fs from 'node:fs';
+          const browser = await chromium.launch({headless:true});
+          const context = await browser.newContext({
+            viewport:{width:1440,height:1000},
+            extraHTTPHeaders:{'bypass-tunnel-reminder':'true'}
+          });
+          const page = await context.newPage();
+          const response = await page.goto('https://icy-eels-hug.loca.lt/what-we-do/', {waitUntil:'networkidle',timeout:90000});
+          await page.waitForTimeout(2500);
+          await page.screenshot({path:'what-we-do-full.png',fullPage:true});
+          fs.writeFileSync('what-we-do.txt', await page.locator('body').innerText());
+          fs.writeFileSync('what-we-do.html', await page.content());
+          fs.writeFileSync('meta.json', JSON.stringify({status:response?.status(),title:await page.title(),url:page.url()},null,2));
+          await browser.close();
+          EOF
+          node capture.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: what-we-do-capture
+          path: |
+            what-we-do-full.png
+            what-we-do.txt
+            what-we-do.html
+            meta.json
+          retention-days: 1
